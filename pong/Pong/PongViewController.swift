@@ -38,7 +38,8 @@ class PongViewController: UIViewController {
 
     /// Это переменная отображения лэйбла со счетом игрока
     @IBOutlet var userScoreLabel: UILabel!
-
+    @IBOutlet var userScoreLabelTwo: UILabel!
+    
     // MARK: - Instance Properties
 
     /// Это переменная обработчика жеста движения пальцем по экрану
@@ -73,7 +74,7 @@ class PongViewController: UIViewController {
     var enemyPaddleDynamicBehavior: UIDynamicItemBehavior?
     var collisionBehavior: UICollisionBehavior?
 
-    // NOTE: Все переменный вплоть до 82-ой строки используются для реагирования
+    // NOTE: Все переменные вплоть до 82-ой строки используются для реагирования
     // на стлокновения мяча - проигрывание звука столкновения и вибро-отклик
     var audioPlayers: [AVAudioPlayer] = []
     var audioPlayersLock = NSRecursiveLock()
@@ -98,6 +99,11 @@ class PongViewController: UIViewController {
     var userScore: Int = 0 {
         didSet {
             /// При каждом обновлении значения переменной - обновляем текст в лэйбле
+            updateUserScoreLabel()
+        }
+    }
+    var userScoreTwo: Int = 0 {
+        didSet {
             updateUserScoreLabel()
         }
     }
@@ -183,5 +189,6 @@ class PongViewController: UIViewController {
 
     private func updateUserScoreLabel() {
         userScoreLabel.text = "\(userScore)"
+        userScoreLabelTwo.text = "\(userScoreTwo)"
     }
 }

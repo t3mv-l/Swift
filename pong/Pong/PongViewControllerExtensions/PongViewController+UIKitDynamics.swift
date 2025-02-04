@@ -54,6 +54,7 @@ extension PongViewController {
             axisOfTranslation: CGVector(dx: 1.0, dy: 0.0)
         )
         dynamicAnimator.addBehavior(attachmentBehavior)
+        
     }
 }
 
@@ -69,7 +70,7 @@ extension PongViewController: UICollisionBehaviorDelegate {
         with item2: UIDynamicItem,
         at p: CGPoint
     ) {
-        /// Пытаемся опеределить являются ли столкнувшиеся объекты элементами отображения
+        /// Пытаемся опеределить, являются ли столкнувшиеся объекты элементами отображения
         guard
             let view1 = item1 as? UIView,
             let view2 = item2 as? UIView
@@ -124,8 +125,9 @@ extension PongViewController: UICollisionBehaviorDelegate {
         } else if abs(p.y - view.bounds.height) <= Constants.contactThreshold {
             // NOTE: Если место столкновения близко к нижней границе,
             // значит мяч ударился о нижнюю грань экрана
+            userScoreTwo += 1
             shouldResetBall = true
-            print("Ball has hit user side.")
+            print("Ball has hit user side. Enemy score is now: \(userScoreTwo)")
         }
 
         if shouldResetBall {

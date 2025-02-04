@@ -16,11 +16,6 @@ There are only two commits in this project.
 
 Also attached are screenshots of what the application looked like before and after my tweaking.
 
-Before:
+Before/after:
 
-![Original version](screenshots/pong_before.png)
-
-
-After:
-
-![Modified version](screenshots/pong_after.png)
+![Original version](screenshots/pong_before.png) ![Modified version](screenshots/pong_after.png)
