@@ -1,4 +1,4 @@
-### Tic-tac-toe + Concentration
+# Tic-tac-toe + Concentration
 
 ### In this project, I wrote a **“Tic-tac-toe”** game using **UIKit**, and learned how **Tab bar** and **Navigation Controller** work.
 
@@ -9,4 +9,4 @@
 ### The general structure looks like this:
 ![](screenshot/project_structure.png)
 
-- Thanks to the creators of [course on Stepik] (https://stepik.org/course/195212/) for the idea for the project.
+- Thanks to the creators of [course on Stepik](https://stepik.org/course/195212/) for the idea for the project.
