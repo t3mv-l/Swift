@@ -1,0 +1,568 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		AC441A5F2D4E96710032BFAF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AC441A402D4E966F0032BFAF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AC441A472D4E966F0032BFAF;
+			remoteInfo = krestiki_noliki;
+		};
+		AC441A692D4E96710032BFAF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AC441A402D4E966F0032BFAF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AC441A472D4E966F0032BFAF;
+			remoteInfo = krestiki_noliki;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		AC441A482D4E966F0032BFAF /* krestiki_noliki.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = krestiki_noliki.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC441A5E2D4E96710032BFAF /* krestiki_nolikiTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = krestiki_nolikiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC441A682D4E96710032BFAF /* krestiki_nolikiUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = krestiki_nolikiUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		AC441A702D4E96710032BFAF /* Exceptions for "krestiki_noliki" folder in "krestiki_noliki" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = AC441A472D4E966F0032BFAF /* krestiki_noliki */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		AC441A4A2D4E966F0032BFAF /* krestiki_noliki */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				AC441A702D4E96710032BFAF /* Exceptions for "krestiki_noliki" folder in "krestiki_noliki" target */,
+			);
+			path = krestiki_noliki;
+			sourceTree = "<group>";
+		};
+		AC441A612D4E96710032BFAF /* krestiki_nolikiTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = krestiki_nolikiTests;
+			sourceTree = "<group>";
+		};
+		AC441A6B2D4E96710032BFAF /* krestiki_nolikiUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = krestiki_nolikiUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AC441A452D4E966F0032BFAF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC441A5B2D4E96710032BFAF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC441A652D4E96710032BFAF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AC441A3F2D4E966F0032BFAF = {
+			isa = PBXGroup;
+			children = (
+				AC441A4A2D4E966F0032BFAF /* krestiki_noliki */,
+				AC441A612D4E96710032BFAF /* krestiki_nolikiTests */,
+				AC441A6B2D4E96710032BFAF /* krestiki_nolikiUITests */,
+				AC441A492D4E966F0032BFAF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AC441A492D4E966F0032BFAF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AC441A482D4E966F0032BFAF /* krestiki_noliki.app */,
+				AC441A5E2D4E96710032BFAF /* krestiki_nolikiTests.xctest */,
+				AC441A682D4E96710032BFAF /* krestiki_nolikiUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AC441A472D4E966F0032BFAF /* krestiki_noliki */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AC441A712D4E96710032BFAF /* Build configuration list for PBXNativeTarget "krestiki_noliki" */;
+			buildPhases = (
+				AC441A442D4E966F0032BFAF /* Sources */,
+				AC441A452D4E966F0032BFAF /* Frameworks */,
+				AC441A462D4E966F0032BFAF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				AC441A4A2D4E966F0032BFAF /* krestiki_noliki */,
+			);
+			name = krestiki_noliki;
+			packageProductDependencies = (
+			);
+			productName = krestiki_noliki;
+			productReference = AC441A482D4E966F0032BFAF /* krestiki_noliki.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AC441A5D2D4E96710032BFAF /* krestiki_nolikiTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AC441A762D4E96710032BFAF /* Build configuration list for PBXNativeTarget "krestiki_nolikiTests" */;
+			buildPhases = (
+				AC441A5A2D4E96710032BFAF /* Sources */,
+				AC441A5B2D4E96710032BFAF /* Frameworks */,
+				AC441A5C2D4E96710032BFAF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AC441A602D4E96710032BFAF /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AC441A612D4E96710032BFAF /* krestiki_nolikiTests */,
+			);
+			name = krestiki_nolikiTests;
+			packageProductDependencies = (
+			);
+			productName = krestiki_nolikiTests;
+			productReference = AC441A5E2D4E96710032BFAF /* krestiki_nolikiTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		AC441A672D4E96710032BFAF /* krestiki_nolikiUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AC441A792D4E96710032BFAF /* Build configuration list for PBXNativeTarget "krestiki_nolikiUITests" */;
+			buildPhases = (
+				AC441A642D4E96710032BFAF /* Sources */,
+				AC441A652D4E96710032BFAF /* Frameworks */,
+				AC441A662D4E96710032BFAF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AC441A6A2D4E96710032BFAF /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AC441A6B2D4E96710032BFAF /* krestiki_nolikiUITests */,
+			);
+			name = krestiki_nolikiUITests;
+			packageProductDependencies = (
+			);
+			productName = krestiki_nolikiUITests;
+			productReference = AC441A682D4E96710032BFAF /* krestiki_nolikiUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AC441A402D4E966F0032BFAF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					AC441A472D4E966F0032BFAF = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					AC441A5D2D4E96710032BFAF = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = AC441A472D4E966F0032BFAF;
+					};
+					AC441A672D4E96710032BFAF = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = AC441A472D4E966F0032BFAF;
+					};
+				};
+			};
+			buildConfigurationList = AC441A432D4E966F0032BFAF /* Build configuration list for PBXProject "krestiki_noliki" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AC441A3F2D4E966F0032BFAF;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = AC441A492D4E966F0032BFAF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AC441A472D4E966F0032BFAF /* krestiki_noliki */,
+				AC441A5D2D4E96710032BFAF /* krestiki_nolikiTests */,
+				AC441A672D4E96710032BFAF /* krestiki_nolikiUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AC441A462D4E966F0032BFAF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC441A5C2D4E96710032BFAF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC441A662D4E96710032BFAF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AC441A442D4E966F0032BFAF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC441A5A2D4E96710032BFAF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC441A642D4E96710032BFAF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AC441A602D4E96710032BFAF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AC441A472D4E966F0032BFAF /* krestiki_noliki */;
+			targetProxy = AC441A5F2D4E96710032BFAF /* PBXContainerItemProxy */;
+		};
+		AC441A6A2D4E96710032BFAF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AC441A472D4E966F0032BFAF /* krestiki_noliki */;
+			targetProxy = AC441A692D4E96710032BFAF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		AC441A722D4E96710032BFAF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = krestiki_noliki/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "pet-project.krestiki-noliki";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AC441A732D4E96710032BFAF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = krestiki_noliki/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "pet-project.krestiki-noliki";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		AC441A742D4E96710032BFAF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AC441A752D4E96710032BFAF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AC441A772D4E96710032BFAF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "pet-project.krestiki-nolikiTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/krestiki_noliki.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/krestiki_noliki";
+			};
+			name = Debug;
+		};
+		AC441A782D4E96710032BFAF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "pet-project.krestiki-nolikiTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/krestiki_noliki.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/krestiki_noliki";
+			};
+			name = Release;
+		};
+		AC441A7A2D4E96710032BFAF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "pet-project.krestiki-nolikiUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = krestiki_noliki;
+			};
+			name = Debug;
+		};
+		AC441A7B2D4E96710032BFAF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "pet-project.krestiki-nolikiUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = krestiki_noliki;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AC441A432D4E966F0032BFAF /* Build configuration list for PBXProject "krestiki_noliki" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC441A742D4E96710032BFAF /* Debug */,
+				AC441A752D4E96710032BFAF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AC441A712D4E96710032BFAF /* Build configuration list for PBXNativeTarget "krestiki_noliki" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC441A722D4E96710032BFAF /* Debug */,
+				AC441A732D4E96710032BFAF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AC441A762D4E96710032BFAF /* Build configuration list for PBXNativeTarget "krestiki_nolikiTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC441A772D4E96710032BFAF /* Debug */,
+				AC441A782D4E96710032BFAF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AC441A792D4E96710032BFAF /* Build configuration list for PBXNativeTarget "krestiki_nolikiUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC441A7A2D4E96710032BFAF /* Debug */,
+				AC441A7B2D4E96710032BFAF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AC441A402D4E966F0032BFAF /* Project object */;
+}
