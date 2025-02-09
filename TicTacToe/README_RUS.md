@@ -9,4 +9,4 @@
 ### Общая структура выглядит так:
 ![](screenshot/project_structure.png)
 
-- За идею для проекта благодарю создателей [курса на Stepik] (https://stepik.org/course/195212/).
+- За идею для проекта благодарю создателей [курса на Stepik](https://stepik.org/course/195212/).
