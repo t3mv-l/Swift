@@ -8,7 +8,7 @@
 import UIKit
 
 protocol CreateTaskViewControllerDelegate: AnyObject {
-    func addNewTask(task: String, description: String, date: String)
+    func addNewTask(todo: Todo, description: String?, date: String)
     func updateTask(at index: Int, task: String, description: String, date: String)
 }
 
@@ -16,6 +16,7 @@ class CreateTaskViewController: UIViewController {
     var taskToEdit: (title: String, description: String, date: String)?
     var editingIndex: Int?
     weak var delegate: CreateTaskViewControllerDelegate?
+    var existingTodos: [Todo] = []
 
     @IBOutlet weak var createTaskTextView: UITextView!
     
@@ -56,22 +57,24 @@ class CreateTaskViewController: UIViewController {
     
     @IBAction func newTaskCreatedButton(_ sender: UIButton) {
         let fullText = createTaskTextView.text ?? ""
+        guard !fullText.isEmpty else { return }
         let components = fullText.components(separatedBy: .newlines)
         
         let title = components.first ?? ""
         let description = components.dropFirst().joined(separator: "\n")
-        let currentDate = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yy"
-        let dateString = dateFormatter.string(from: currentDate)
         
-        if let index = editingIndex {
-            delegate?.updateTask(at: index, task: title, description: description, date: dateString)
-        } else {
-            delegate?.addNewTask(task: title, description: description, date: dateString)
-        }
+        let newID = (existingTodos.last?.id ?? 0) + 1
+        let newTodo = Todo(id: newID, todo: title, description: description, date: getCurrentDateString(), completed: false)
+        
+        delegate?.addNewTask(todo: newTodo, description: description, date: getCurrentDateString())
         
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    private func getCurrentDateString() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yy"
+        return dateFormatter.string(from: Date())
     }
     
     override func viewDidAppear(_ animated: Bool) {

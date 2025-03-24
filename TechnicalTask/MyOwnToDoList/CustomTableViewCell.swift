@@ -13,8 +13,12 @@ class CustomTableViewCell: UITableViewCell {
     @IBOutlet weak var taskDescriptionLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     var isTapped = false
+    var onCompletingTaskButtonTapped: (() -> Void)?
     
-    func configureCell(isCompleted: Bool) {
+    func configureCell(isCompleted: Bool, taskHeader: String, taskDescription: String, date: String) {
+        taskHeaderLabel.text = taskHeader
+        taskDescriptionLabel.text = taskDescription
+        dateLabel.text = date
         if isCompleted {
             setCompletedState()
         } else {
@@ -26,7 +30,9 @@ class CustomTableViewCell: UITableViewCell {
         completingTaskButton.setImage(UIImage(systemName: "checkmark.circle"), for: .normal)
         completingTaskButton.tintColor = .systemYellow
         taskHeaderLabel.textColor = UIColor(named: "CustomColor")
-        taskHeaderLabel.attributedText = NSAttributedString(string: taskHeaderLabel.text ?? "", attributes: [ .strikethroughStyle: NSUnderlineStyle.single.rawValue])
+        
+        //taskHeaderLabel.attributedText = NSAttributedString(string: taskHeaderLabel.text ?? "", attributes: [ .strikethroughStyle: NSUnderlineStyle.single.rawValue])
+        
         taskDescriptionLabel.textColor = UIColor(named: "CustomColor")
         isTapped = true
     }
@@ -35,17 +41,11 @@ class CustomTableViewCell: UITableViewCell {
         completingTaskButton.setImage(UIImage(systemName: "circle"), for: .normal)
         completingTaskButton.tintColor = UIColor(named: "CustomColorDarker")
         taskHeaderLabel.textColor = .white
-        taskHeaderLabel.attributedText = NSAttributedString(string: taskHeaderLabel.text ?? "")
         taskDescriptionLabel.textColor = .white
         isTapped = false
     }
     
     @IBAction func completingTaskButton(_ sender: UIButton) {
-        if !isTapped {
-            setCompletedState()
-        } else {
-            resetState()
-        }
-        isTapped.toggle()
+        onCompletingTaskButtonTapped?()
     }
 }

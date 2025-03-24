@@ -10,22 +10,22 @@ import UIKit
 struct Todo: Codable {
     let id: Int
     let todo: String
+    let description: String?
+    let date: String?
     let completed: Bool
-    let userId: Int
+    
+    func toggled() -> Todo {
+        return Todo(id: id, todo: todo, description: description, date: date, completed: !completed)
+    }
 }
 
 struct TodoResponse: Codable {
     let todos: [Todo]
 }
 
-class ViewController: UIViewController, UISearchBarDelegate {
-//    var taskList = ["Почитать книгу", "Уборка в квартире", "Заняться спортом", "Работа над проектом", "Вечерний отдых", "Зарядка утром", "Какая-то ещё задача, чтобы типа 7 задач было"]
-//    var descriptionList = ["Составить список необходимых продуктов для ужина. Не забыть проверить, что уже есть в холодильнике", "Провести генеральную уборку в квартире", "Сходить в спортзал или сделать тренировку дома. Не забыть про разминку и растяжку!", "Выделить время для работы над проектом на работе. Сфокусироваться на выполнении важных задач", "Найти время для расслабления перед сном: посмотреть фильм или послушать музыку", "Сделать утреннюю зарядку", "Описание для седьмой задачи"]
-//    var dateList : [String] = ["09/10/24", "02/10/24", "02/10/24", "09/10/24", "02/10/24", "02/10/24", "09/10/24"]
-    var taskList: [String] = []
-    var descriptionList: [String] = []
-    var dateList: [String] = []
-    var currentState: [Bool] = []
+class ViewController: UIViewController {
+    var todos: [Todo] = []
+    var isSearching: Bool = false
     
     @IBOutlet weak var taskLabel: UILabel!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -35,14 +35,19 @@ class ViewController: UIViewController, UISearchBarDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        drawBottomToolbar()
         taskListTableView.dataSource = self
         taskListTableView.delegate = self
         searchBar.delegate = self
         fetchTodos()
-        
+
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+        taskListTableView.addGestureRecognizer(longPressGesture)
+    }
+    
+    func drawBottomToolbar() {
         countLabel = UILabel()
         countLabel.textColor = .white
-        countLabel.text = "\(taskList.count) Задач"
         countLabel.font = .systemFont(ofSize: 13)
         countLabel.textAlignment = .center
         countLabel.numberOfLines = 1
@@ -56,9 +61,6 @@ class ViewController: UIViewController, UISearchBarDelegate {
         createTaskButton.tintColor = .systemYellow
         
         bottomToolBar.setItems([flexibleSpaceLeft, labelItem, flexibleSpaceRight, createTaskButton], animated: false)
-        
-        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
-        taskListTableView.addGestureRecognizer(longPressGesture)
     }
     
     func fetchTodos() {
@@ -85,24 +87,14 @@ class ViewController: UIViewController, UISearchBarDelegate {
     
     func processTodos(_ todos: [Todo]) {
         DispatchQueue.main.async {
-            self.taskList = todos.map { $0.todo }
-            self.descriptionList = Array(repeating: "", count: todos.count)
-            self.dateList = Array(repeating: self.getCurrentDateString(), count: todos.count)
-            self.currentState = todos.map { $0.completed }
-            print("currentStates: \(self.currentState)")
+            self.todos = todos
             self.taskListTableView.reloadData()
-            self.countLabel.text = "\(self.taskList.count) Задач"
+            self.countLabel.text = "\(self.todos.count) Задач"
             self.countLabel.sizeToFit()
-            
-            for (index, isCompleted) in self.currentState.enumerated() {
-                if let cell = self.taskListTableView.cellForRow(at: IndexPath(row: index, section: 0)) as? CustomTableViewCell {
-                    cell.configureCell(isCompleted: isCompleted)
-                }
-            }
         }
     }
     
-    func getCurrentDateString() -> String {
+    private func getCurrentDateString() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yy"
         return dateFormatter.string(from: Date())
@@ -148,43 +140,39 @@ class ViewController: UIViewController, UISearchBarDelegate {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let createTaskVC = storyboard.instantiateViewController(withIdentifier: "CreateTaskViewController") as! CreateTaskViewController
         createTaskVC.delegate = self
-        
-        let taskTitle = taskList[indexPath.row]
-        let taskDescription = descriptionList[indexPath.row]
-        let taskDate = dateList[indexPath.row]
-        
-        createTaskVC.taskToEdit = (taskTitle, taskDescription, taskDate)
-        
         self.navigationController?.pushViewController(createTaskVC, animated: true)
     }
     
     func shareTask(at indexPath: IndexPath) {
-        let vc = UIActivityViewController(activityItems: ["\(taskList[indexPath.row])\n\(descriptionList[indexPath.row])"], applicationActivities: [])
+        let vc = UIActivityViewController(activityItems: ["\(todos[indexPath.row])"], applicationActivities: [])
         vc.popoverPresentationController?.sourceView = self.view
         present(vc, animated: true)
     }
     
     func deleteTask(at indexPath: IndexPath) {
-        taskList.remove(at: indexPath.row)
-        descriptionList.remove(at: indexPath.row)
-        dateList.remove(at: indexPath.row)
-        currentState.remove(at: indexPath.row)
+        todos.remove(at: indexPath.row)
         taskListTableView.reloadData()
-        countLabel.text = "\(taskList.count) Задач"
+        countLabel.text = "\(todos.count) Задач"
+    }
+    
+    private func toggleTodoCompletion(at index: Int) {
+        todos[index] = todos[index].toggled()
+        taskListTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
     }
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return taskList.count
+        return todos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = taskListTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
-        cell.taskHeaderLabel.text = taskList[indexPath.row]
-        cell.taskDescriptionLabel.text = descriptionList[indexPath.row]
-        cell.dateLabel.text = dateList[indexPath.row]
-        cell.configureCell(isCompleted: currentState[indexPath.row])
+        let todo = todos[indexPath.row]
+        cell.configureCell(isCompleted: todo.completed, taskHeader: todo.todo, taskDescription: todo.description ?? "Random description", date: getCurrentDateString())
+        cell.onCompletingTaskButtonTapped = { [weak self] in
+            self?.toggleTodoCompletion(at: indexPath.row)
+        }
         return cell
     }
     
@@ -193,39 +181,35 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+extension ViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        //реализовать
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        //реализовать
+    }
+}
+
 extension ViewController: CreateTaskViewControllerDelegate {
-    func addNewTask(task: String, description: String, date: String) {
-        taskList.append(task)
-        descriptionList.append(description)
-        dateList.append(date)
-        currentState.append(false)
+    func addNewTask(todo: Todo, description: String?, date: String) {
+        let newTodo = Todo(id: todo.id, todo: todo.todo, description: description, date: getCurrentDateString(), completed: todo.completed)
+        todos.append(newTodo)
         taskListTableView.reloadData()
-        countLabel.text = "\(taskList.count) Задач"
+        countLabel.text = "\(todos.count) Задач"
     }
     
-    //не срабатывает, пофиксить
     func updateTask(at index: Int, task: String, description: String, date: String) {
-        guard index >= 0, index < taskList.count else { return }
-        taskList[index] = task
-        descriptionList[index] = description
-        dateList[index] = date
-        taskListTableView.reloadData()
+        //реализовать
     }
     
-    //не срабатывает, пофиксить
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let newTaskVC = segue.destination as? CreateTaskViewController {
-            newTaskVC.delegate = self
-            
-            if let indexPath = sender as? IndexPath {
-                let task = taskList[indexPath.row]
-                let description = descriptionList[indexPath.row]
-                let date = dateList[indexPath.row]
-                newTaskVC.taskToEdit = (title: task, description: description, date: date)
-                newTaskVC.editingIndex = indexPath.row
-            }
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if let newTaskVC = segue.destination as? CreateTaskViewController {
+//            newTaskVC.delegate = self
+//            newTaskVC.existingTodos = self.todos
+//            //реализовать
+//        }
+//    }
 }
 
 //альтернатива AlertController для меню
