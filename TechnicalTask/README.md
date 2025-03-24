@@ -4,5 +4,5 @@
 
 - Создаю ToDoList с возможностью создания новой задачи, а также редактирования или удаления текущих.
 
-![](screenshots/screenshot-01.png)
+![](screenshots/screenshot-06.png)
 ![](screenshots/screenshot-02.png)

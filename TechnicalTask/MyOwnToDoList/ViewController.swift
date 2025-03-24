@@ -7,10 +7,26 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-    var taskList = ["Почитать книгу", "Уборка в квартире", "Заняться спортом", "Работа над проектом", "Вечерний отдых", "Зарядка утром", "Какая-то ещё задача, чтобы типа 7 задач было"]
-    var descriptionList = ["Составить список необходимых продуктов для ужина. Не забыть проверить, что уже есть в холодильнике", "Провести генеральную уборку в квартире", "Сходить в спортзал или сделать тренировку дома. Не забыть про разминку и растяжку!", "Выделить время для работы над проектом на работе. Сфокусироваться на выполнении важных задач", "Найти время для расслабления перед сном: посмотреть фильм или послушать музыку", "Сделать утреннюю зарядку", "Описание для седьмой задачи"]
-    var dateList : [String] = ["09/10/24", "02/10/24", "02/10/24", "09/10/24", "02/10/24", "02/10/24", "09/10/24"]
+struct Todo: Codable {
+    let id: Int
+    let todo: String
+    let completed: Bool
+    let userId: Int
+}
+
+struct TodoResponse: Codable {
+    let todos: [Todo]
+}
+
+class ViewController: UIViewController, UISearchBarDelegate {
+//    var taskList = ["Почитать книгу", "Уборка в квартире", "Заняться спортом", "Работа над проектом", "Вечерний отдых", "Зарядка утром", "Какая-то ещё задача, чтобы типа 7 задач было"]
+//    var descriptionList = ["Составить список необходимых продуктов для ужина. Не забыть проверить, что уже есть в холодильнике", "Провести генеральную уборку в квартире", "Сходить в спортзал или сделать тренировку дома. Не забыть про разминку и растяжку!", "Выделить время для работы над проектом на работе. Сфокусироваться на выполнении важных задач", "Найти время для расслабления перед сном: посмотреть фильм или послушать музыку", "Сделать утреннюю зарядку", "Описание для седьмой задачи"]
+//    var dateList : [String] = ["09/10/24", "02/10/24", "02/10/24", "09/10/24", "02/10/24", "02/10/24", "09/10/24"]
+    var taskList: [String] = []
+    var descriptionList: [String] = []
+    var dateList: [String] = []
+    var currentState: [Bool] = []
+    
     @IBOutlet weak var taskLabel: UILabel!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var bottomToolBar: UIToolbar!
@@ -21,6 +37,8 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         taskListTableView.dataSource = self
         taskListTableView.delegate = self
+        searchBar.delegate = self
+        fetchTodos()
         
         countLabel = UILabel()
         countLabel.textColor = .white
@@ -41,6 +59,53 @@ class ViewController: UIViewController {
         
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
         taskListTableView.addGestureRecognizer(longPressGesture)
+    }
+    
+    func fetchTodos() {
+        guard let url = URL(string: "https://dummyjson.com/todos") else { return }
+        
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print("Error fetching todos: \(error)")
+                return
+            }
+            
+            guard let data = data else { return }
+            
+            do {
+                let decodedResponse = try JSONDecoder().decode(TodoResponse.self, from: data)
+                self.processTodos(decodedResponse.todos)
+            } catch {
+                print("Error coding JSON: \(error)")
+            }
+        }
+        
+        task.resume()
+    }
+    
+    func processTodos(_ todos: [Todo]) {
+        DispatchQueue.main.async {
+            self.taskList = todos.map { $0.todo }
+            self.descriptionList = Array(repeating: "", count: todos.count)
+            self.dateList = Array(repeating: self.getCurrentDateString(), count: todos.count)
+            self.currentState = todos.map { $0.completed }
+            print("currentStates: \(self.currentState)")
+            self.taskListTableView.reloadData()
+            self.countLabel.text = "\(self.taskList.count) Задач"
+            self.countLabel.sizeToFit()
+            
+            for (index, isCompleted) in self.currentState.enumerated() {
+                if let cell = self.taskListTableView.cellForRow(at: IndexPath(row: index, section: 0)) as? CustomTableViewCell {
+                    cell.configureCell(isCompleted: isCompleted)
+                }
+            }
+        }
+    }
+    
+    func getCurrentDateString() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yy"
+        return dateFormatter.string(from: Date())
     }
     
     @objc func createTaskButtonTapped() {
@@ -103,6 +168,7 @@ class ViewController: UIViewController {
         taskList.remove(at: indexPath.row)
         descriptionList.remove(at: indexPath.row)
         dateList.remove(at: indexPath.row)
+        currentState.remove(at: indexPath.row)
         taskListTableView.reloadData()
         countLabel.text = "\(taskList.count) Задач"
     }
@@ -118,10 +184,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         cell.taskHeaderLabel.text = taskList[indexPath.row]
         cell.taskDescriptionLabel.text = descriptionList[indexPath.row]
         cell.dateLabel.text = dateList[indexPath.row]
-        cell.dateLabel.textColor = UIColor(named: "CustomColor")
-        cell.backgroundColor = .black
-        cell.taskHeaderLabel.textColor = .white
-        cell.taskDescriptionLabel.textColor = .white
+        cell.configureCell(isCompleted: currentState[indexPath.row])
         return cell
     }
     
@@ -135,6 +198,7 @@ extension ViewController: CreateTaskViewControllerDelegate {
         taskList.append(task)
         descriptionList.append(description)
         dateList.append(date)
+        currentState.append(false)
         taskListTableView.reloadData()
         countLabel.text = "\(taskList.count) Задач"
     }

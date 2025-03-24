@@ -8,26 +8,43 @@
 import UIKit
 
 class CustomTableViewCell: UITableViewCell {
-    
+    @IBOutlet weak var completingTaskButton: UIButton!
     @IBOutlet weak var taskHeaderLabel: UILabel!
     @IBOutlet weak var taskDescriptionLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     var isTapped = false
-    @IBAction func completingTaskButton(_ sender: UIButton) {
-        //если кнопка нажата
-        if !isTapped {
-            sender.setImage(UIImage(systemName: "checkmark.circle"), for: .normal)
-            sender.tintColor = .systemYellow
-            taskHeaderLabel.textColor = UIColor(named: "CustomColor")
-            taskHeaderLabel.attributedText = NSAttributedString(string: taskHeaderLabel.text ?? "", attributes: [ .strikethroughStyle: NSUnderlineStyle.single.rawValue])
-            taskDescriptionLabel.textColor = UIColor(named: "CustomColor")
+    
+    func configureCell(isCompleted: Bool) {
+        if isCompleted {
+            setCompletedState()
         } else {
-            //если кнопка отжата обратно
-            sender.setImage(UIImage(systemName: "circle"), for: .normal)
-            sender.tintColor = UIColor(named: "CustomColorDarker")
-            taskHeaderLabel.textColor = .white
-            taskHeaderLabel.attributedText = NSAttributedString(string: taskHeaderLabel.text ?? "")
-            taskDescriptionLabel.textColor = .white
+            resetState()
+        }
+    }
+    
+    private func setCompletedState() {
+        completingTaskButton.setImage(UIImage(systemName: "checkmark.circle"), for: .normal)
+        completingTaskButton.tintColor = .systemYellow
+        taskHeaderLabel.textColor = UIColor(named: "CustomColor")
+        taskHeaderLabel.attributedText = NSAttributedString(string: taskHeaderLabel.text ?? "", attributes: [ .strikethroughStyle: NSUnderlineStyle.single.rawValue])
+        taskDescriptionLabel.textColor = UIColor(named: "CustomColor")
+        isTapped = true
+    }
+    
+    private func resetState() {
+        completingTaskButton.setImage(UIImage(systemName: "circle"), for: .normal)
+        completingTaskButton.tintColor = UIColor(named: "CustomColorDarker")
+        taskHeaderLabel.textColor = .white
+        taskHeaderLabel.attributedText = NSAttributedString(string: taskHeaderLabel.text ?? "")
+        taskDescriptionLabel.textColor = .white
+        isTapped = false
+    }
+    
+    @IBAction func completingTaskButton(_ sender: UIButton) {
+        if !isTapped {
+            setCompletedState()
+        } else {
+            resetState()
         }
         isTapped.toggle()
     }
