@@ -6,7 +6,16 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		AC88B40A2D92E99400B74D9E /* CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AC88B4082D92E99400B74D9E /* CoreData.xcdatamodeld */; };
+		AC88B4112D92EB2300B74D9E /* Task+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC88B40F2D92EB2300B74D9E /* Task+CoreDataClass.swift */; };
+		AC88B4122D92EB2300B74D9E /* Task+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC88B4102D92EB2300B74D9E /* Task+CoreDataProperties.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		AC88B4092D92E99400B74D9E /* CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreData.xcdatamodel; sourceTree = "<group>"; };
+		AC88B40F2D92EB2300B74D9E /* Task+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataClass.swift"; sourceTree = "<group>"; };
+		AC88B4102D92EB2300B74D9E /* Task+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		ACA913CB2D8DC03000DF457D /* MyOwnToDoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyOwnToDoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -45,6 +54,9 @@
 		ACA913C22D8DC03000DF457D = {
 			isa = PBXGroup;
 			children = (
+				AC88B40F2D92EB2300B74D9E /* Task+CoreDataClass.swift */,
+				AC88B4102D92EB2300B74D9E /* Task+CoreDataProperties.swift */,
+				AC88B4082D92E99400B74D9E /* CoreData.xcdatamodeld */,
 				ACA913CD2D8DC03000DF457D /* MyOwnToDoList */,
 				ACA913CC2D8DC03000DF457D /* Products */,
 			);
@@ -132,6 +144,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC88B40A2D92E99400B74D9E /* CoreData.xcdatamodeld in Sources */,
+				AC88B4112D92EB2300B74D9E /* Task+CoreDataClass.swift in Sources */,
+				AC88B4122D92EB2300B74D9E /* Task+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -333,6 +348,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		AC88B4082D92E99400B74D9E /* CoreData.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				AC88B4092D92E99400B74D9E /* CoreData.xcdatamodel */,
+			);
+			currentVersion = AC88B4092D92E99400B74D9E /* CoreData.xcdatamodel */;
+			path = CoreData.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = ACA913C32D8DC03000DF457D /* Project object */;
 }

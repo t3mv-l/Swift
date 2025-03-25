@@ -40,6 +40,7 @@ class CustomTableViewCell: UITableViewCell {
     private func resetState() {
         completingTaskButton.setImage(UIImage(systemName: "circle"), for: .normal)
         completingTaskButton.tintColor = UIColor(named: "CustomColorDarker")
+        //taskHeaderLabel.attributedText = NSAttributedString(string: taskHeaderLabel.text ?? "")
         taskHeaderLabel.textColor = .white
         taskDescriptionLabel.textColor = .white
         isTapped = false

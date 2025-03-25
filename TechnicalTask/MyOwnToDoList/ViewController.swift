@@ -8,7 +8,7 @@
 import UIKit
 
 struct Todo: Codable {
-    let id: Int
+    let id: Int32
     let todo: String
     let description: String?
     let date: String?
@@ -25,7 +25,9 @@ struct TodoResponse: Codable {
 
 class ViewController: UIViewController {
     var todos: [Todo] = []
+    var filteredTodos: [Todo] = []
     var isSearching: Bool = false
+    var isScrolling: Bool = false
     
     @IBOutlet weak var taskLabel: UILabel!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -81,11 +83,11 @@ class ViewController: UIViewController {
                 print("Error coding JSON: \(error)")
             }
         }
-        
         task.resume()
     }
     
     func processTodos(_ todos: [Todo]) {
+        CoreDataManager.shared.saveTasks(from: todos)
         DispatchQueue.main.async {
             self.todos = todos
             self.taskListTableView.reloadData()
@@ -163,13 +165,13 @@ class ViewController: UIViewController {
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return todos.count
+        return isSearching ? filteredTodos.count : todos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = taskListTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
-        let todo = todos[indexPath.row]
-        cell.configureCell(isCompleted: todo.completed, taskHeader: todo.todo, taskDescription: todo.description ?? "Random description", date: getCurrentDateString())
+        let todo = isSearching ? filteredTodos[indexPath.row] : todos[indexPath.row]
+        cell.configureCell(isCompleted: todo.completed, taskHeader: todo.todo, taskDescription: todo.description ?? " ", date: getCurrentDateString())
         cell.onCompletingTaskButtonTapped = { [weak self] in
             self?.toggleTodoCompletion(at: indexPath.row)
         }
@@ -183,11 +185,30 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension ViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        //реализовать
+        if searchText.isEmpty {
+            isSearching = false
+            filteredTodos.removeAll()
+        } else {
+            isSearching = true
+            filteredTodos = todos.filter { todo in
+                return todo.todo.lowercased().contains(searchText.lowercased()) || (todo.description?.lowercased().contains(searchText.lowercased()) ?? false)
+            }
+            countLabel.text = "\(filteredTodos.count) Задач"
+        }
+        taskListTableView.reloadData()
     }
     
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        //реализовать
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+}
+
+extension ViewController: UIScrollViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        isScrolling = true
+        if searchBar.isFirstResponder {
+            searchBar.resignFirstResponder()
+        }
     }
 }
 
@@ -195,6 +216,7 @@ extension ViewController: CreateTaskViewControllerDelegate {
     func addNewTask(todo: Todo, description: String?, date: String) {
         let newTodo = Todo(id: todo.id, todo: todo.todo, description: description, date: getCurrentDateString(), completed: todo.completed)
         todos.append(newTodo)
+        CoreDataManager.shared.createTask(Int32(todos.count) + newTodo.id, newTodo.todo, newTodo.description, newTodo.completed)
         taskListTableView.reloadData()
         countLabel.text = "\(todos.count) Задач"
     }
