@@ -10,10 +10,10 @@ import CoreData
 
 public final class CoreDataManager: NSObject {
     public static let shared = CoreDataManager()
-    private override init() {}
-    
+    //private override init() {}
+        
     private var appDelegate: AppDelegate {
-        UIApplication.shared.delegate as! AppDelegate
+        return UIApplication.shared.delegate as! AppDelegate
     }
     
     private var context: NSManagedObjectContext {
@@ -27,23 +27,22 @@ public final class CoreDataManager: NSObject {
     }
     
     public func createTask(_ id: Int32, _ header: String, _ desc: String?, _ isCompleted: Bool) {
-        guard let taskEntityDescription = NSEntityDescription.entity(forEntityName: "Task", in: context) else { return }
-        let task = Task(entity: taskEntityDescription, insertInto: context)
-        task.id = id
-        task.header = header
-        task.desc = desc
-        task.isCompleted = isCompleted
-        appDelegate.saveContext()
+        DispatchQueue.main.async {
+            guard let taskEntityDescription = NSEntityDescription.entity(forEntityName: "Task", in: self.context) else { return }
+            let task = Task(entity: taskEntityDescription, insertInto: self.context)
+            task.id = id
+            task.header = header
+            task.desc = desc
+            task.isCompleted = isCompleted
+            self.appDelegate.saveContext()
+        }
     }
         
     public func fetchTasks() -> [Task] {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Task")
         do {
-            return try context.fetch(fetchRequest) as! [Task]
-        } catch {
-            print(error.localizedDescription)
-        }
-        return []
+            return (try? context.fetch(fetchRequest) as? [Task]) ?? []
+        } 
     }
     
     public func fetchTask(_ id: Int32) -> Task? {
@@ -55,45 +54,53 @@ public final class CoreDataManager: NSObject {
     }
     
     public func updateTask(with id: Int32, newHeader: String, newDesc: String?, newIsCompleted: Bool) {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Task")
-        do {
-            guard let tasks = try context.fetch(fetchRequest) as? [Task], let task = tasks.first(where: {$0.id == id }) else { return }
-            task.header = newHeader
-            task.desc = newDesc
-            task.isCompleted = newIsCompleted
-            appDelegate.saveContext()
-        } catch {
-            print(error.localizedDescription)
+        DispatchQueue.main.async {
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Task")
+            do {
+                guard let tasks = try self.context.fetch(fetchRequest) as? [Task], let task = tasks.first(where: {$0.id == id }) else { return }
+                task.header = newHeader
+                task.desc = newDesc
+                task.isCompleted = newIsCompleted
+                self.appDelegate.saveContext()
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
     
     public func deleteAllTasks() {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Task")
-        do {
-            let tasks = try context.fetch(fetchRequest) as? [Task]
-            tasks?.forEach( {context.delete($0)} )
-            appDelegate.saveContext()
-        } catch {
-            print(error.localizedDescription)
+        DispatchQueue.main.async {
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Task")
+            do {
+                let tasks = try self.context.fetch(fetchRequest) as? [Task]
+                tasks?.forEach( {self.context.delete($0)} )
+                self.appDelegate.saveContext()
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
     
     public func deleteTask(with id: Int32) {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Task")
-        do {
-            guard let tasks = try context.fetch(fetchRequest) as? [Task], let task = tasks.first(where: {$0.id == id} ) else { return }
-            context.delete(task)
-            appDelegate.saveContext()
-        } catch {
-            print(error.localizedDescription)
+        DispatchQueue.main.async {
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Task")
+            do {
+                guard let tasks = try self.context.fetch(fetchRequest) as? [Task], let task = tasks.first(where: {$0.id == id} ) else { return }
+                self.context.delete(task)
+                self.appDelegate.saveContext()
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
     
     func saveTasks(from apiTodos: [Todo]) {
-        deleteAllTasks()
+        DispatchQueue.main.async {
+            self.deleteAllTasks()
             
-        for apiTodo in apiTodos {
-            createTask(apiTodo.id, apiTodo.todo, apiTodo.description, apiTodo.completed)
+            for apiTodo in apiTodos {
+                self.createTask(apiTodo.id, apiTodo.todo, apiTodo.description, apiTodo.completed)
+            }
         }
     }
 }

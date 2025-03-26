@@ -9,7 +9,6 @@ import UIKit
 
 protocol CreateTaskViewControllerDelegate: AnyObject {
     func addNewTask(todo: Todo, description: String?, date: String)
-    func updateTask(at index: Int, task: String, description: String, date: String)
 }
 
 class CreateTaskViewController: UIViewController {
@@ -35,24 +34,28 @@ class CreateTaskViewController: UIViewController {
         self.overrideUserInterfaceStyle = .dark
         
         if let task = taskToEdit {
-            let attributedString = NSMutableAttributedString()
-            
-            let titleAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 40, weight: .bold), .foregroundColor: UIColor.white]
-            let titleString = NSAttributedString(string: task.title, attributes: titleAttributes)
-            attributedString.append(titleString)
-            attributedString.append(NSAttributedString(string: "\n\n"))
-            
-            let dateAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor(named: "CustomColor")!]
-            let dateString = NSAttributedString(string: task.date, attributes: dateAttributes)
-            attributedString.append(dateString)
-            attributedString.append(NSAttributedString(string: "\n\n"))
-            
-            let descriptionAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 20), .foregroundColor: UIColor.white]
-            let descriptionString = NSAttributedString(string: task.description, attributes: descriptionAttributes)
-            attributedString.append(descriptionString)
-            
-            createTaskTextView.attributedText = attributedString
+            setUpTextView(for: task)
         }
+    }
+    
+    private func setUpTextView(for task: (title: String, description: String, date: String)) {
+        let attributedString = NSMutableAttributedString()
+        
+        let titleAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 40, weight: .bold), .foregroundColor: UIColor.white]
+        let titleString = NSAttributedString(string: task.title, attributes: titleAttributes)
+        attributedString.append(titleString)
+        attributedString.append(NSAttributedString(string: "\n\n"))
+        
+        let dateAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor(named: "CustomColor")!]
+        let dateString = NSAttributedString(string: task.date, attributes: dateAttributes)
+        attributedString.append(dateString)
+        attributedString.append(NSAttributedString(string: "\n\n"))
+        
+        let descriptionAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 20), .foregroundColor: UIColor.white]
+        let descriptionString = NSAttributedString(string: task.description, attributes: descriptionAttributes)
+        attributedString.append(descriptionString)
+        
+        createTaskTextView.attributedText = attributedString
     }
     
     @IBAction func newTaskCreatedButton(_ sender: UIButton) {

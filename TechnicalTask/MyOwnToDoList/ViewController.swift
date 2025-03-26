@@ -15,6 +15,7 @@ struct Todo: Codable {
     let completed: Bool
     
     func toggled() -> Todo {
+        CoreDataManager.shared.updateTask(with: id, newHeader: todo, newDesc: description ?? nil, newIsCompleted: !completed)
         return Todo(id: id, todo: todo, description: description, date: date, completed: !completed)
     }
 }
@@ -45,6 +46,8 @@ class ViewController: UIViewController {
 
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
         taskListTableView.addGestureRecognizer(longPressGesture)
+        
+        CoreDataManager.shared.logCoreDataDBPath()
     }
     
     func drawBottomToolbar() {
@@ -142,6 +145,11 @@ class ViewController: UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let createTaskVC = storyboard.instantiateViewController(withIdentifier: "CreateTaskViewController") as! CreateTaskViewController
         createTaskVC.delegate = self
+        let task = todos[indexPath.row]
+        let header = task.todo
+        let desc = task.description
+        let date = task.date
+        createTaskVC.taskToEdit = (title: header, description: desc ?? "", date: date ?? "")
         self.navigationController?.pushViewController(createTaskVC, animated: true)
     }
     
@@ -153,6 +161,7 @@ class ViewController: UIViewController {
     
     func deleteTask(at indexPath: IndexPath) {
         todos.remove(at: indexPath.row)
+        CoreDataManager.shared.deleteTask(with: Int32(indexPath.row + 1))
         taskListTableView.reloadData()
         countLabel.text = "\(todos.count) Задач"
     }
@@ -214,15 +223,18 @@ extension ViewController: UIScrollViewDelegate {
 
 extension ViewController: CreateTaskViewControllerDelegate {
     func addNewTask(todo: Todo, description: String?, date: String) {
-        let newTodo = Todo(id: todo.id, todo: todo.todo, description: description, date: getCurrentDateString(), completed: todo.completed)
-        todos.append(newTodo)
-        CoreDataManager.shared.createTask(Int32(todos.count) + newTodo.id, newTodo.todo, newTodo.description, newTodo.completed)
-        taskListTableView.reloadData()
-        countLabel.text = "\(todos.count) Задач"
-    }
-    
-    func updateTask(at index: Int, task: String, description: String, date: String) {
-        //реализовать
+        if let index = todos.firstIndex(where: {$0.todo == todo.todo}) {
+            let editedTodo = Todo(id: todo.id, todo: todo.todo, description: description, date: getCurrentDateString(), completed: todo.completed)
+            todos[index] = editedTodo
+            taskListTableView.reloadData()
+            countLabel.text = "\(todos.count) Задач"
+        } else {
+            let newTodo = Todo(id: todo.id, todo: todo.todo, description: description, date: getCurrentDateString(), completed: todo.completed)
+            todos.append(newTodo)
+            CoreDataManager.shared.createTask(Int32(todos.count - 1) + newTodo.id, newTodo.todo, newTodo.description, newTodo.completed)
+            taskListTableView.reloadData()
+            countLabel.text = "\(todos.count) Задач"
+        }
     }
     
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
