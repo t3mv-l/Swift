@@ -30,9 +30,7 @@ class CustomTableViewCell: UITableViewCell {
         completingTaskButton.setImage(UIImage(systemName: "checkmark.circle"), for: .normal)
         completingTaskButton.tintColor = .systemYellow
         taskHeaderLabel.textColor = UIColor(named: "CustomColor")
-        
-        //taskHeaderLabel.attributedText = NSAttributedString(string: taskHeaderLabel.text ?? "", attributes: [ .strikethroughStyle: NSUnderlineStyle.single.rawValue])
-        
+        taskHeaderLabel.attributedText = NSAttributedString(string: taskHeaderLabel.text ?? "", attributes: [ .strikethroughStyle: NSUnderlineStyle.single.rawValue])
         taskDescriptionLabel.textColor = UIColor(named: "CustomColor")
         isTapped = true
     }
@@ -40,7 +38,7 @@ class CustomTableViewCell: UITableViewCell {
     private func resetState() {
         completingTaskButton.setImage(UIImage(systemName: "circle"), for: .normal)
         completingTaskButton.tintColor = UIColor(named: "CustomColorDarker")
-        //taskHeaderLabel.attributedText = NSAttributedString(string: taskHeaderLabel.text ?? "")
+        taskHeaderLabel.attributedText = NSAttributedString(string: taskHeaderLabel.text ?? "", attributes: [ .strikethroughStyle: NSUnderlineStyle.RawValue()])
         taskHeaderLabel.textColor = .white
         taskDescriptionLabel.textColor = .white
         isTapped = false
