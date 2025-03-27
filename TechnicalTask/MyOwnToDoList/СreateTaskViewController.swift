@@ -44,12 +44,12 @@ class CreateTaskViewController: UIViewController {
         let titleAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 40, weight: .bold), .foregroundColor: UIColor.white]
         let titleString = NSAttributedString(string: task.title, attributes: titleAttributes)
         attributedString.append(titleString)
-        attributedString.append(NSAttributedString(string: "\n\n"))
+        attributedString.append(NSAttributedString(string: "\n"))
         
         let dateAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor(named: "CustomColor")!]
         let dateString = NSAttributedString(string: task.date, attributes: dateAttributes)
         attributedString.append(dateString)
-        attributedString.append(NSAttributedString(string: "\n\n"))
+        attributedString.append(NSAttributedString(string: " "))
         
         let descriptionAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 20), .foregroundColor: UIColor.white]
         let descriptionString = NSAttributedString(string: task.description, attributes: descriptionAttributes)
@@ -68,7 +68,7 @@ class CreateTaskViewController: UIViewController {
         
         let newID = (existingTodos.last?.id ?? 0) + 1
         let newTodo = Todo(id: newID, todo: title, description: description, date: getCurrentDateString(), completed: false)
-        
+        //кнопка "Готово"
         delegate?.addNewTask(todo: newTodo, description: description, date: getCurrentDateString())
         
         self.navigationController?.popViewController(animated: true)

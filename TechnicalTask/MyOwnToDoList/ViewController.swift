@@ -35,6 +35,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var bottomToolBar: UIToolbar!
     @IBOutlet weak var taskListTableView: UITableView!
     var countLabel: UILabel!
+    var blurEffectView: UIVisualEffectView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,29 +117,180 @@ class ViewController: UIViewController {
         if gesture.state == .began {
             let point = gesture.location(in: taskListTableView)
             if let indexPath = taskListTableView.indexPathForRow(at: point) {
-                showEditOptions(for: indexPath)
+                presentDetailView(for: indexPath)
             }
         }
     }
     
-    func showEditOptions(for indexPath: IndexPath) {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+    func presentDetailView(for indexPath: IndexPath) {
+        let selectedTask = todos[indexPath.row]
         
-        let editAction = UIAlertAction(title: "Редактировать", style: .default) { [weak self] _ in
-            self?.editTask(at: indexPath) }
-        editAction.setValue(UIImage(systemName: "square.and.pencil"), forKey: "image")
-        let shareAction = UIAlertAction(title: "Поделиться", style: .default) { [weak self] _ in
-            self?.shareTask(at: indexPath) }
-        shareAction.setValue(UIImage(systemName: "square.and.arrow.up"), forKey: "image")
-        let deleteAction = UIAlertAction(title: "Удалить", style: .destructive)  { [weak self] _ in
-            self?.deleteTask(at: indexPath) }
-        deleteAction.setValue(UIImage(systemName: "trash"), forKey: "image")
-
-        alertController.addAction(editAction)
-        alertController.addAction(shareAction)
-        alertController.addAction(deleteAction)
+        let blurEffect = UIBlurEffect(style: .dark)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView?.frame = view.bounds
+        blurEffectView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         
-        present(alertController, animated: true)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(closeViews))
+        blurEffectView?.addGestureRecognizer(tapGesture)
+        
+        if let blurEffectView = blurEffectView {
+            view.addSubview(blurEffectView)
+            
+            let detailView = UIView()
+            detailView.backgroundColor = UIColor(named: "CustomColorBottomToolbar")
+            detailView.layer.cornerRadius = 10
+            detailView.clipsToBounds = true
+            detailView.center = view.center
+            detailView.bounds.size = CGSize(width: 360, height: 118)
+            detailView.alpha = 0
+            
+            let headerLabel = UILabel()
+            headerLabel.text = selectedTask.todo
+            headerLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+            headerLabel.textColor = .white
+            headerLabel.translatesAutoresizingMaskIntoConstraints = false
+            detailView.addSubview(headerLabel)
+            
+            let descriptionLabel = UILabel()
+            descriptionLabel.text = selectedTask.description ?? " "
+            descriptionLabel.font = UIFont.systemFont(ofSize: 13)
+            descriptionLabel.numberOfLines = 2
+            descriptionLabel.textColor = .white
+            descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+            detailView.addSubview(descriptionLabel)
+            
+            let dateLabel = UILabel()
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "dd/MM/yy"
+            dateFormatter.string(from: Date())
+            dateLabel.text = dateFormatter.string(from: Date())
+            dateLabel.font = UIFont.systemFont(ofSize: 14)
+            dateLabel.textColor = UIColor(named: "CustomColor")
+            dateLabel.translatesAutoresizingMaskIntoConstraints = false
+            detailView.addSubview(dateLabel)
+            
+            NSLayoutConstraint.activate([
+                headerLabel.leadingAnchor.constraint(equalTo: detailView.leadingAnchor, constant: 16),
+                headerLabel.trailingAnchor.constraint(equalTo: detailView.trailingAnchor, constant: -16),
+                headerLabel.topAnchor.constraint(equalTo: detailView.topAnchor, constant: 16),
+                descriptionLabel.leadingAnchor.constraint(equalTo: detailView.leadingAnchor, constant: 16),
+                descriptionLabel.trailingAnchor.constraint(equalTo: detailView.trailingAnchor, constant: -16),
+                descriptionLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 10),
+                dateLabel.leadingAnchor.constraint(equalTo: detailView.leadingAnchor, constant: 16),
+                dateLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10)
+            ])
+            
+            blurEffectView.contentView.addSubview(detailView)
+            UIView.animate(withDuration: 0.3, animations: {
+                detailView.alpha = 1
+            }) { _ in
+                self.showFunctionMenu(below: detailView)
+            }
+        }
+    }
+    
+    func showFunctionMenu(below detailView: UIView) {
+        let alertView = UIView(frame: CGRect(x: (view.bounds.width - 300) / 2, y: detailView.frame.maxY + 20, width: 300, height: 150))
+        alertView.backgroundColor = UIColor(named: "CustomColorMenu")
+        alertView.layer.cornerRadius = 10
+        alertView.alpha = 0
+        
+        let editButton = UIButton(type: .system)
+        editButton.setTitle("Редактировать                                        ", for: .normal)
+        editButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        editButton.setImage(UIImage(systemName: "square.and.pencil"), for: .normal)
+        editButton.semanticContentAttribute = .forceRightToLeft
+        editButton.tintColor = .black
+        editButton.contentHorizontalAlignment = .left
+        editButton.addTarget(self, action: #selector(editTaskButtonTapped), for: .touchUpInside)
+        
+        let shareButton = UIButton(type: .system)
+        shareButton.setTitle("Поделиться                                           ", for: .normal)
+        shareButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        shareButton.setImage(UIImage(systemName: "square.and.arrow.up"), for: .normal)
+        shareButton.semanticContentAttribute = .forceRightToLeft
+        shareButton.tintColor = .black
+        shareButton.contentHorizontalAlignment = .left
+        shareButton.addTarget(self, action: #selector(shareTaskButtonTapped), for: .touchUpInside)
+        
+        let deleteButton = UIButton(type: .system)
+        deleteButton.setTitle("Удалить                                               ", for: .normal)
+        deleteButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        deleteButton.setImage(UIImage(systemName: "trash"), for: .normal)
+        deleteButton.semanticContentAttribute = .forceRightToLeft
+        deleteButton.tintColor = .red
+        deleteButton.contentHorizontalAlignment = .left
+        deleteButton.addTarget(self, action: #selector(deleteTaskButtonTapped), for: .touchUpInside)
+        
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        
+        stackView.addArrangedSubview(editButton)
+        
+        let editShareSeparator = UIView()
+        editShareSeparator.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        editShareSeparator.backgroundColor = UIColor.lightGray
+        stackView.addArrangedSubview(editShareSeparator)
+        stackView.addArrangedSubview(shareButton)
+        
+        let shareDeleteSeparator = UIView()
+        shareDeleteSeparator.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        shareDeleteSeparator.backgroundColor = UIColor.lightGray
+        stackView.addArrangedSubview(shareDeleteSeparator)
+        stackView.addArrangedSubview(deleteButton)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        alertView.addSubview(stackView)
+        
+        if let blurEffectView = blurEffectView {
+            blurEffectView.contentView.addSubview(alertView)
+            
+            NSLayoutConstraint.activate([
+                editButton.topAnchor.constraint(equalTo: alertView.topAnchor, constant: 10),
+                editButton.leadingAnchor.constraint(equalTo: alertView.leadingAnchor, constant: 20),
+                editShareSeparator.leadingAnchor.constraint(equalTo: alertView.leadingAnchor),
+                editShareSeparator.trailingAnchor.constraint(equalTo: alertView.trailingAnchor),
+                shareDeleteSeparator.leadingAnchor.constraint(equalTo: alertView.leadingAnchor),
+                shareDeleteSeparator.trailingAnchor.constraint(equalTo: alertView.trailingAnchor),
+                stackView.centerXAnchor.constraint(equalTo: alertView.centerXAnchor),
+                stackView.topAnchor.constraint(equalTo: alertView.topAnchor, constant: 20)
+            ])
+            
+            UIView.animate(withDuration: 0.3, animations: {
+                alertView.alpha = 1
+            })
+        }
+    }
+    
+    @objc func closeViews() {
+        for subview in view.subviews {
+            if let blurEffectView = subview as? UIVisualEffectView {
+                UIView.animate(withDuration: 0.3, animations: {
+                    blurEffectView.alpha = 0
+                }) { _ in
+                    blurEffectView.removeFromSuperview()
+                }
+            }
+        }
+    }
+    
+    @objc func editTaskButtonTapped(sender: UIButton) {
+        closeViews()
+        let indexPath = sender.tag
+        editTask(at: IndexPath(row: indexPath, section: 0))
+    }
+    
+    @objc func shareTaskButtonTapped(sender: UIButton) {
+        closeViews()
+        let indexPath = sender.tag
+        shareTask(at: IndexPath(row: indexPath, section: 0))
+    }
+    
+    @objc func deleteTaskButtonTapped(sender: UIButton) {
+        closeViews()
+        let indexPath = sender.tag
+        deleteTask(at: IndexPath(row: indexPath, section: 0))
     }
     
     func editTask(at indexPath: IndexPath) {
@@ -154,7 +306,7 @@ class ViewController: UIViewController {
     }
     
     func shareTask(at indexPath: IndexPath) {
-        let vc = UIActivityViewController(activityItems: ["\(todos[indexPath.row])"], applicationActivities: [])
+        let vc = UIActivityViewController(activityItems: ["\(todos[indexPath.row].todo)\n\(todos[indexPath.row].description ?? "")"], applicationActivities: [])
         vc.popoverPresentationController?.sourceView = self.view
         present(vc, animated: true)
     }
@@ -162,6 +314,7 @@ class ViewController: UIViewController {
     func deleteTask(at indexPath: IndexPath) {
         todos.remove(at: indexPath.row)
         CoreDataManager.shared.deleteTask(with: Int32(indexPath.row + 1))
+        //todos = CoreDataManager.shared.fetchTasks()
         taskListTableView.reloadData()
         countLabel.text = "\(todos.count) Задач"
     }
@@ -179,6 +332,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = taskListTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
+        cell.selectionStyle = .none
         let todo = isSearching ? filteredTodos[indexPath.row] : todos[indexPath.row]
         cell.configureCell(isCompleted: todo.completed, taskHeader: todo.todo, taskDescription: todo.description ?? " ", date: getCurrentDateString())
         cell.onCompletingTaskButtonTapped = { [weak self] in
@@ -223,19 +377,14 @@ extension ViewController: UIScrollViewDelegate {
 
 extension ViewController: CreateTaskViewControllerDelegate {
     func addNewTask(todo: Todo, description: String?, date: String) {
-        if let index = todos.firstIndex(where: {$0.todo == todo.todo}) {
-            let editedTodo = Todo(id: todo.id, todo: todo.todo, description: description, date: getCurrentDateString(), completed: todo.completed)
-            todos[index] = editedTodo
-            taskListTableView.reloadData()
-            countLabel.text = "\(todos.count) Задач"
-        } else {
-            let newTodo = Todo(id: todo.id, todo: todo.todo, description: description, date: getCurrentDateString(), completed: todo.completed)
-            todos.append(newTodo)
-            CoreDataManager.shared.createTask(Int32(todos.count - 1) + newTodo.id, newTodo.todo, newTodo.description, newTodo.completed)
-            taskListTableView.reloadData()
-            countLabel.text = "\(todos.count) Задач"
+        let newTodo = Todo(id: todo.id, todo: todo.todo, description: description, date: getCurrentDateString(), completed: todo.completed)
+        todos.append(newTodo)
+        let newId = Int32(todos.count)
+        CoreDataManager.shared.createTask(newId, newTodo.todo, newTodo.description, newTodo.completed)
+        //todos = CoreDataManager.shared.fetchTasks()
+        taskListTableView.reloadData()
+        countLabel.text = "\(todos.count) Задач"
         }
-    }
     
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 //        if let newTaskVC = segue.destination as? CreateTaskViewController {
@@ -245,45 +394,3 @@ extension ViewController: CreateTaskViewControllerDelegate {
 //        }
 //    }
 }
-
-//альтернатива AlertController для меню
-//        let alertView = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 150))
-//        alertView.backgroundColor = UIColor(named: "CustomColorMenu")
-//        alertView.layer.cornerRadius = 10
-//        alertView.center = self.view.center
-//
-//        let editButton = UIButton(type: .system)
-//        editButton.setTitle("Редактировать", for: .normal)
-//        editButton.setImage(UIImage(systemName: "square.and.pencil"), for: .normal)
-//        editButton.semanticContentAttribute = .forceRightToLeft
-//        editButton.tintColor = .black
-//        editButton.contentHorizontalAlignment = .left
-//        editButton.addTarget(self, action: #selector(editTask), for: .touchUpInside)
-//        let shareButton = UIButton(type: .system)
-//        shareButton.setTitle("Поделиться", for: .normal)
-//        shareButton.setImage(UIImage(systemName: "square.and.arrow.up"), for: .normal)
-//        shareButton.semanticContentAttribute = .forceRightToLeft
-//        shareButton.tintColor = .black
-//        shareButton.contentHorizontalAlignment = .left
-//        shareButton.addTarget(self, action: #selector(shareTask), for: .touchUpInside)
-//        let deleteButton = UIButton(type: .system)
-//        deleteButton.setTitle("Удалить", for: .normal)
-//        deleteButton.setImage(UIImage(systemName: "trash"), for: .normal)
-//        deleteButton.semanticContentAttribute = .forceRightToLeft
-//        deleteButton.tintColor = .red
-//        deleteButton.contentHorizontalAlignment = .left
-//        deleteButton.addTarget(self, action: #selector(deleteTask), for: .touchUpInside)
-//
-//        let stackView = UIStackView(arrangedSubviews: [editButton, shareButton, deleteButton])
-//        stackView.axis = .vertical
-//        stackView.spacing = 20
-//
-//        stackView.translatesAutoresizingMaskIntoConstraints = false
-//
-//        alertView.addSubview(stackView)
-//        view.addSubview(alertView)
-//
-//        NSLayoutConstraint.activate([
-//            stackView.centerXAnchor.constraint(equalTo: alertView.centerXAnchor),
-//            stackView.centerYAnchor.constraint(equalTo: alertView.centerYAnchor)
-//        ])

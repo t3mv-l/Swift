@@ -10,7 +10,6 @@ import CoreData
 
 public final class CoreDataManager: NSObject {
     public static let shared = CoreDataManager()
-    //private override init() {}
         
     private var appDelegate: AppDelegate {
         return UIApplication.shared.delegate as! AppDelegate
@@ -38,17 +37,17 @@ public final class CoreDataManager: NSObject {
         }
     }
         
-    public func fetchTasks() -> [Task] {
+    func fetchTasks() -> [Todo] {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Task")
         do {
-            return (try? context.fetch(fetchRequest) as? [Task]) ?? []
-        } 
+            return (try? context.fetch(fetchRequest) as? [Todo]) ?? []
+        }
     }
     
-    public func fetchTask(_ id: Int32) -> Task? {
+    func fetchTask(_ id: Int32) -> Todo? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Task")
         do {
-            let tasks = try? context.fetch(fetchRequest) as? [Task]
+            let tasks = try? context.fetch(fetchRequest) as? [Todo]
             return tasks?.first(where: {$0.id == id})
         }
     }
