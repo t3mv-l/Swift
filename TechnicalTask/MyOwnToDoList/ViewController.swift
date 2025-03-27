@@ -124,6 +124,7 @@ class ViewController: UIViewController {
     
     func presentDetailView(for indexPath: IndexPath) {
         let selectedTask = todos[indexPath.row]
+        let selectedIndexPath = IndexPath(row: indexPath.row, section: 0)
         
         let blurEffect = UIBlurEffect(style: .dark)
         blurEffectView = UIVisualEffectView(effect: blurEffect)
@@ -184,12 +185,12 @@ class ViewController: UIViewController {
             UIView.animate(withDuration: 0.3, animations: {
                 detailView.alpha = 1
             }) { _ in
-                self.showFunctionMenu(below: detailView)
+                self.showFunctionMenu(below: detailView, indexPath: selectedIndexPath)
             }
         }
     }
     
-    func showFunctionMenu(below detailView: UIView) {
+    func showFunctionMenu(below detailView: UIView, indexPath: IndexPath) {
         let alertView = UIView(frame: CGRect(x: (view.bounds.width - 300) / 2, y: detailView.frame.maxY + 20, width: 300, height: 150))
         alertView.backgroundColor = UIColor(named: "CustomColorMenu")
         alertView.layer.cornerRadius = 10
@@ -261,6 +262,10 @@ class ViewController: UIViewController {
                 alertView.alpha = 1
             })
         }
+        
+        editButton.tag = indexPath.row
+        shareButton.tag = indexPath.row
+        deleteButton.tag = indexPath.row
     }
     
     @objc func closeViews() {
