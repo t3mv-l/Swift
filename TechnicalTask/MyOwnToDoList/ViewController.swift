@@ -31,8 +31,8 @@ class ViewController: UIViewController {
     var isScrolling: Bool = false
     
     @IBOutlet weak var taskLabel: UILabel!
-    @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var bottomToolBar: UIToolbar!
+    @IBOutlet var searchBar: UISearchBar!
+    @IBOutlet var bottomToolBar: UIToolbar!
     @IBOutlet var taskListTableView: UITableView!
     var countLabel: UILabel!
     var blurEffectView: UIVisualEffectView?

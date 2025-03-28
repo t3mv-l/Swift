@@ -18,7 +18,7 @@ class CreateTaskViewController: UIViewController {
     weak var delegate: CreateTaskViewControllerDelegate?
     var existingTodos: [Todo] = []
 
-    @IBOutlet weak var createTaskTextView: UITextView!
+    @IBOutlet var createTaskTextView: UITextView!
     
     @IBAction func backButton(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)

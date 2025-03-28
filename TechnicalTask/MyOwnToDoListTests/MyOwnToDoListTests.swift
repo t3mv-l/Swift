@@ -11,12 +11,20 @@ import XCTest
 
 final class MyOwnToDoListTests: XCTestCase {
     var vc: ViewController!
+    var bottomToolBar: UIToolbar!
+    var searchBar: UISearchBar!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
-        vc = ViewController()
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        vc = storyboard.instantiateViewController(withIdentifier: "ViewController") as? ViewController
         vc.taskListTableView = UITableView()
-        vc.countLabel = UILabel()
+        vc.taskListTableView.delegate = vc
+        vc.taskListTableView.dataSource = vc
+        vc.searchBar = UISearchBar()
+        vc.searchBar.delegate = vc
+        vc.loadViewIfNeeded()
+        vc.viewDidLoad()
     }
 
     override func tearDownWithError() throws {
@@ -62,6 +70,36 @@ final class MyOwnToDoListTests: XCTestCase {
         }
                     
         wait(for: [expectation], timeout: 5)
+    }
+    
+    func testAddNewTask() throws {
+        let newTaskTitle = "New Task Title"
+        let newTaskDescription = "This is a new task description"
+        
+        let createTaskVC = CreateTaskViewController()
+        createTaskVC.createTaskTextView = UITextView()
+        createTaskVC.delegate = vc
+        createTaskVC.createTaskTextView.text = "\(newTaskTitle)\n\(newTaskDescription)"
+        
+        vc.todos = []
+        
+        createTaskVC.newTaskCreatedButton(UIButton())
+        
+        XCTAssertEqual(vc.todos.count, 1, "Task count should be 1")
+        XCTAssertEqual(vc.todos.last?.todo, newTaskTitle, "The last task's title should match the new task's title")
+        XCTAssertEqual(vc.todos.last?.description, newTaskDescription, "The last task's description should match the new task's description")
+        XCTAssertEqual(vc.countLabel.text, "1 Задач", "Count label should display the correct number of tasks")
+        
+        let anotherTaskTitle = "Another Task Title"
+        let anotherTaskDescription = "This is another task description"
+        createTaskVC.createTaskTextView.text = "\(anotherTaskTitle)\n\(anotherTaskDescription)"
+        createTaskVC.newTaskCreatedButton(UIButton())
+        
+        XCTAssertEqual(vc.todos.count, 2, "Task count should be 2")
+        XCTAssertEqual(vc.todos.last?.todo, anotherTaskTitle, "The last task's title should match another task's title")
+        XCTAssertEqual(vc.todos.last?.description, anotherTaskDescription, "The last task's description should match another task's description")
+        XCTAssertEqual(vc.countLabel.text, "2 Задач", "Count label should display the correct number of tasks")
+        XCTAssertEqual(vc.todos.last?.completed, false, "Completing status should match")
     }
 }
 
