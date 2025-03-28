@@ -33,9 +33,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var taskLabel: UILabel!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var bottomToolBar: UIToolbar!
-    @IBOutlet weak var taskListTableView: UITableView!
+    @IBOutlet var taskListTableView: UITableView!
     var countLabel: UILabel!
     var blurEffectView: UIVisualEffectView?
+    var session: URLSession = URLSession.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
