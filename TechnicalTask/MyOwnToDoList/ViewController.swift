@@ -302,11 +302,14 @@ class ViewController: UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let createTaskVC = storyboard.instantiateViewController(withIdentifier: "CreateTaskViewController") as! CreateTaskViewController
         createTaskVC.delegate = self
+        createTaskVC.existingTodos = todos
         let task = todos[indexPath.row]
         let header = task.todo
         let desc = task.description
         let date = task.date
-        createTaskVC.taskToEdit = (title: header, description: desc ?? "", date: date ?? "")
+        let isCompleted = task.completed
+        createTaskVC.taskToEdit = (title: header, description: desc ?? "", date: date ?? "", completed: isCompleted)
+        createTaskVC.editingIndex = indexPath.row
         self.navigationController?.pushViewController(createTaskVC, animated: true)
     }
     
@@ -389,13 +392,11 @@ extension ViewController: CreateTaskViewControllerDelegate {
         //todos = CoreDataManager.shared.fetchTasks()
         taskListTableView.reloadData()
         countLabel.text = "\(todos.count) Задач"
-        }
+    }
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if let newTaskVC = segue.destination as? CreateTaskViewController {
-//            newTaskVC.delegate = self
-//            newTaskVC.existingTodos = self.todos
-//            //реализовать
-//        }
-//    }
+    func updateTask(at index: Int, todo: Todo, description: String?, date: String) {
+        todos[index] = todo
+        //todos = CoreDataManager.shared.fetchTasks()
+        taskListTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+    }
 }

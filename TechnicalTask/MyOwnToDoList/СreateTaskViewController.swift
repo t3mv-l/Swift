@@ -9,10 +9,11 @@ import UIKit
 
 protocol CreateTaskViewControllerDelegate: AnyObject {
     func addNewTask(todo: Todo, description: String?, date: String)
+    func updateTask(at index: Int, todo: Todo, description: String?, date: String)
 }
 
 class CreateTaskViewController: UIViewController {
-    var taskToEdit: (title: String, description: String, date: String)?
+    var taskToEdit: (title: String, description: String, date: String, completed: Bool)?
     var editingIndex: Int?
     weak var delegate: CreateTaskViewControllerDelegate?
     var existingTodos: [Todo] = []
@@ -35,21 +36,22 @@ class CreateTaskViewController: UIViewController {
         
         if let task = taskToEdit {
             setUpTextView(for: task)
+            editingIndex = editingIndex ?? nil
         }
     }
     
-    private func setUpTextView(for task: (title: String, description: String, date: String)) {
+    private func setUpTextView(for task: (title: String, description: String, date: String, completed: Bool)) {
         let attributedString = NSMutableAttributedString()
         
         let titleAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 40, weight: .bold), .foregroundColor: UIColor.white]
         let titleString = NSAttributedString(string: task.title, attributes: titleAttributes)
         attributedString.append(titleString)
-        attributedString.append(NSAttributedString(string: "\n"))
+        attributedString.append(NSAttributedString(string: "\n\n"))
         
         let dateAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor(named: "CustomColor")!]
         let dateString = NSAttributedString(string: task.date, attributes: dateAttributes)
         attributedString.append(dateString)
-        attributedString.append(NSAttributedString(string: " "))
+        attributedString.append(NSAttributedString(string: "\n\n"))
         
         let descriptionAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 20), .foregroundColor: UIColor.white]
         let descriptionString = NSAttributedString(string: task.description, attributes: descriptionAttributes)
@@ -62,15 +64,18 @@ class CreateTaskViewController: UIViewController {
         let fullText = createTaskTextView.text ?? ""
         guard !fullText.isEmpty else { return }
         let components = fullText.components(separatedBy: .newlines)
-        
         let title = components.first ?? ""
         let description = components.dropFirst().joined(separator: "\n")
         
-        let newID = (existingTodos.last?.id ?? 0) + 1
-        let newTodo = Todo(id: newID, todo: title, description: description, date: getCurrentDateString(), completed: false)
-        //кнопка "Готово"
-        delegate?.addNewTask(todo: newTodo, description: description, date: getCurrentDateString())
-        
+        if let editingIndex = editingIndex {
+            let completedStatus = existingTodos[editingIndex].completed
+            let updatedTodo = Todo(id: existingTodos[editingIndex].id, todo: title, description: description, date: getCurrentDateString(), completed: completedStatus)
+            delegate?.updateTask(at: editingIndex, todo: updatedTodo, description: description, date: getCurrentDateString())
+        } else {
+            let newID = (existingTodos.last?.id ?? 0) + 1
+            let newTodo = Todo(id: newID, todo: title, description: description, date: getCurrentDateString(), completed: false)
+            delegate?.addNewTask(todo: newTodo, description: description, date: getCurrentDateString())
+        }
         self.navigationController?.popViewController(animated: true)
     }
     
