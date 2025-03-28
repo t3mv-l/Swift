@@ -61,45 +61,84 @@ final class MyOwnToDoListTests: XCTestCase {
     func testPerformanceExample() throws {
         let url = URL(string: "https://dummyjson.com/todos")!
         let expectation = XCTestExpectation(description: "Fetch todos from API")
-                    
         measure {
-            let data = try? Data(contentsOf: url)
-            if data != nil {
+            let task = URLSession.shared.dataTask(with: url) { data, response, error in
+                if let error = error {
+                    print("Error: \(error.localizedDescription)")
+                    expectation.fulfill()
+                    return
+                }
                 expectation.fulfill()
             }
+            task.resume()
         }
-                    
-        wait(for: [expectation], timeout: 5)
+        wait(for: [expectation], timeout: 5.0)
     }
     
     func testAddNewTask() throws {
-        let newTaskTitle = "New Task Title"
-        let newTaskDescription = "This is a new task description"
+        let expectation = XCTestExpectation(description: "Cell will be added")
+            
+        DispatchQueue.main.async {
+            let createTaskVC = CreateTaskViewController()
+            let newTaskTitle = "New Task Title"
+            let newTaskDescription = "This is a new task description"
+            createTaskVC.createTaskTextView = UITextView()
+            createTaskVC.delegate = self.vc
+            createTaskVC.createTaskTextView.text = "\(newTaskTitle)\n\(newTaskDescription)"
+            self.vc.todos = []
+            createTaskVC.newTaskCreatedButton(UIButton())
+                
+            XCTAssertEqual(self.vc.todos.count, 1, "Task count should be 1")
+            XCTAssertEqual(self.vc.todos.last?.todo, newTaskTitle, "The last task's title should match the new task's title")
+            XCTAssertEqual(self.vc.todos.last?.description, newTaskDescription, "The last task's description should match the new task's description")
+            XCTAssertEqual(self.vc.countLabel.text, "1 Задач", "Count label should display the correct number of tasks")
+                
+            let anotherTaskTitle = "Another Task Title"
+            let anotherTaskDescription = "This is another task description"
+            createTaskVC.createTaskTextView.text = "\(anotherTaskTitle)\n\(anotherTaskDescription)"
+            createTaskVC.newTaskCreatedButton(UIButton())
+                
+            XCTAssertEqual(self.vc.todos.count, 2, "Task count should be 2")
+            XCTAssertEqual(self.vc.todos.last?.todo, anotherTaskTitle, "The last task's title should match another task's title")
+            XCTAssertEqual(self.vc.todos.last?.description, anotherTaskDescription, "The last task's description should match another task's description")
+            XCTAssertEqual(self.vc.countLabel.text, "2 Задач", "Count label should display the correct number of tasks")
+            XCTAssertEqual(self.vc.todos.last?.completed, false, "Completing status should match")
+                
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 5.0)
+    }
+    
+    func testDeleteTask() throws {
+        let expectation = XCTestExpectation(description: "Cells will be removed")
         
-        let createTaskVC = CreateTaskViewController()
-        createTaskVC.createTaskTextView = UITextView()
-        createTaskVC.delegate = vc
-        createTaskVC.createTaskTextView.text = "\(newTaskTitle)\n\(newTaskDescription)"
+        DispatchQueue.main.async {
+            self.vc.todos = [
+                Todo(id: 1, todo: "Existing Task", description: "Existing description", date: "08/03/2022", completed: false),
+                Todo(id: 2, todo: "Another Task", description: "Another description", date: "09/04/2021", completed: true)
+            ]
+            
+            XCTAssertEqual(self.vc.todos.count, 2, "Task count should be 2")
+            
+            let deleteButton = UIButton()
+            deleteButton.tag = 0
+
+            self.vc.deleteTaskButtonTapped(sender: deleteButton)
+            
+            XCTAssertEqual(self.vc.todos.count, 1, "Task count should be 1")
+            XCTAssertEqual(self.vc.todos.last?.todo, "Another Task", "The last task's title should match the existing task's title")
+            XCTAssertEqual(self.vc.todos.last?.description, "Another description", "The last task's description should match the existing task's description")
+            XCTAssertEqual(self.vc.todos.last?.completed, true, "Completing status should match")
+            XCTAssertEqual(self.vc.todos.last?.date, "09/04/2021", "Date should be 8th March, 2022")
+            
+            self.vc.deleteTaskButtonTapped(sender: deleteButton)
+            
+            XCTAssertEqual(self.vc.countLabel.text, "0 Задач", "Count label should display the correct number of tasks")
+            
+            expectation.fulfill()
+        }
         
-        vc.todos = []
-        
-        createTaskVC.newTaskCreatedButton(UIButton())
-        
-        XCTAssertEqual(vc.todos.count, 1, "Task count should be 1")
-        XCTAssertEqual(vc.todos.last?.todo, newTaskTitle, "The last task's title should match the new task's title")
-        XCTAssertEqual(vc.todos.last?.description, newTaskDescription, "The last task's description should match the new task's description")
-        XCTAssertEqual(vc.countLabel.text, "1 Задач", "Count label should display the correct number of tasks")
-        
-        let anotherTaskTitle = "Another Task Title"
-        let anotherTaskDescription = "This is another task description"
-        createTaskVC.createTaskTextView.text = "\(anotherTaskTitle)\n\(anotherTaskDescription)"
-        createTaskVC.newTaskCreatedButton(UIButton())
-        
-        XCTAssertEqual(vc.todos.count, 2, "Task count should be 2")
-        XCTAssertEqual(vc.todos.last?.todo, anotherTaskTitle, "The last task's title should match another task's title")
-        XCTAssertEqual(vc.todos.last?.description, anotherTaskDescription, "The last task's description should match another task's description")
-        XCTAssertEqual(vc.countLabel.text, "2 Задач", "Count label should display the correct number of tasks")
-        XCTAssertEqual(vc.todos.last?.completed, false, "Completing status should match")
+        wait(for: [expectation], timeout: 5.0)
     }
 }
 
