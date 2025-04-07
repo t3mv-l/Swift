@@ -212,6 +212,7 @@ extension PongViewController {
                 // устанавливаем прозрачность и размер мяча возвращая их к нормальному состоянию
                 self.ballView.alpha = 1.0
                 self.ballView.transform = .identity
+                self.resetUserPaddlePosition()
             },
             completion: { [weak self] _ in
                 /// по окончанию анимации включаем обработку следующего нажатия для запуска мяча
@@ -234,5 +235,11 @@ extension PongViewController {
             ),
             size: ballSize
         )
+    }
+    
+    private func resetUserPaddlePosition() {
+        let userPaddleCenterX = (view.bounds.width - userPaddleView.frame.width) / 2
+        userPaddleView.frame.origin.x = userPaddleCenterX
+        dynamicAnimator?.updateItem(usingCurrentState: userPaddleView)
     }
 }
