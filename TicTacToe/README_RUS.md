@@ -6,7 +6,11 @@
 - Кроме того, я дополнительно написал игру **"Концентрация"** на запоминание карточек.
 - Теперь у пользователя на начальном экране есть возможность выбора, в какую игру сыграть.
 
+![](screenshots/tictactoe_gameprocess.gif)
+
+![](screenshots/concentration_gameprocess.gif)
+
 ### Общая структура выглядит так:
-![](screenshot/project_structure.png)
+![](screenshots/project_structure.png)
 
 - За идею для проекта благодарю создателей [курса на Stepik](https://stepik.org/course/195212/).

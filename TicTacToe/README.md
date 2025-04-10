@@ -6,7 +6,11 @@
 - In addition, I wrote a **"Concentration”** - card memorization game.
 - Now the user on the start screen has the option to choose which game to play.
 
+![](screenshots/tictactoe_gameprocess.gif)
+
+![](screenshots/concentration_gameprocess.gif)
+
 ### The general structure looks like this:
-![](screenshot/project_structure.png)
+![](screenshots/project_structure.png)
 
 - Thanks to the creators of [course on Stepik](https://stepik.org/course/195212/) for the idea for the project.
