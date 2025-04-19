@@ -107,6 +107,8 @@ class MyViewController: UIViewController {
         let controller = UISearchController(searchResultsController: nil)
         controller.searchResultsUpdater = self
         controller.searchBar.placeholder = "Поиск"
+        controller.searchBar.showsBookmarkButton = true
+        controller.searchBar.setImage(UIImage(systemName: "microphone.fill"), for: .bookmark, state: .normal)
         return controller
     }()
         
