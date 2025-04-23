@@ -29,6 +29,7 @@ class ViewController: UIViewController {
     var filteredTodos: [Todo] = []
     var isSearching: Bool = false
     var isScrolling: Bool = false
+    let countLabelFormat = NSLocalizedString("%d", comment: "")
     
     @IBOutlet weak var taskLabel: UILabel!
     @IBOutlet var searchBar: UISearchBar!
@@ -44,6 +45,8 @@ class ViewController: UIViewController {
         taskListTableView.dataSource = self
         taskListTableView.delegate = self
         searchBar.delegate = self
+        searchBar.showsBookmarkButton = true
+        searchBar.setImage(UIImage(systemName: "microphone.fill"), for: .bookmark, state: .normal)
         fetchTodos()
 
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
@@ -96,7 +99,7 @@ class ViewController: UIViewController {
         DispatchQueue.main.async {
             self.todos = todos
             self.taskListTableView.reloadData()
-            self.countLabel.text = "\(self.todos.count) Задач"
+            self.countLabel.text = String(format: self.countLabelFormat, self.todos.count)
             self.countLabel.sizeToFit()
         }
     }
@@ -325,7 +328,7 @@ class ViewController: UIViewController {
         CoreDataManager.shared.deleteTask(with: Int32(indexPath.row + 1))
         //todos = CoreDataManager.shared.fetchTasks()
         taskListTableView.reloadData()
-        countLabel.text = "\(todos.count) Задач"
+        countLabel.text = String(format: countLabelFormat, todos.count)
     }
     
     private func toggleTodoCompletion(at index: Int) {
@@ -365,7 +368,7 @@ extension ViewController: UISearchBarDelegate {
             filteredTodos = todos.filter { todo in
                 return todo.todo.lowercased().contains(searchText.lowercased()) || (todo.description?.lowercased().contains(searchText.lowercased()) ?? false)
             }
-            countLabel.text = "\(filteredTodos.count) Задач"
+            countLabel.text = String(format: countLabelFormat, filteredTodos.count)
         }
         taskListTableView.reloadData()
     }
@@ -392,7 +395,7 @@ extension ViewController: CreateTaskViewControllerDelegate {
         CoreDataManager.shared.createTask(newId, newTodo.todo, newTodo.description, newTodo.completed)
         //todos = CoreDataManager.shared.fetchTasks()
         taskListTableView.reloadData()
-        countLabel.text = "\(todos.count) Задач"
+        countLabel.text = String(format: countLabelFormat, todos.count)
     }
     
     func updateTask(at index: Int, todo: Todo, description: String?, date: String) {
