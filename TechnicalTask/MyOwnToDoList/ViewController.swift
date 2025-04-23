@@ -363,6 +363,7 @@ extension ViewController: UISearchBarDelegate {
         if searchText.isEmpty {
             isSearching = false
             filteredTodos.removeAll()
+            countLabel.text = String(format: countLabelFormat, todos.count)
         } else {
             isSearching = true
             filteredTodos = todos.filter { todo in
