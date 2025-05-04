@@ -12,6 +12,8 @@ import SwiftUI
 
 struct FullImageView: View {
     @State private var rotation: Double = 0.0
+    @State private var scale: CGFloat = 1.0
+    @State private var lastScale: CGFloat = 1.0
 //    @State private var canvasView = PKCanvasView()
 //    @State private var toolPicker = PKToolPicker()
     
@@ -23,7 +25,17 @@ struct FullImageView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .rotationEffect(.degrees(rotation))
+                .scaleEffect(scale)
                 .padding()
+                .gesture(
+                    MagnificationGesture()
+                        .onChanged { value in
+                            scale = lastScale * value
+                        }
+                        .onEnded { value in
+                            lastScale = scale
+                        }
+                )
         }
         .toolbar {
             ToolbarItem(placement: .automatic) {
