@@ -11,6 +11,7 @@ import Photos
 import SwiftUI
 
 struct FullImageView: View {
+    @State private var rotation: Double = 0.0
 //    @State private var canvasView = PKCanvasView()
 //    @State private var toolPicker = PKToolPicker()
     
@@ -21,7 +22,24 @@ struct FullImageView: View {
             Image(uiImage: loadImage())
                 .resizable()
                 .aspectRatio(contentMode: .fit)
+                .rotationEffect(.degrees(rotation))
                 .padding()
+        }
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                Button {
+                    rotateCounterClockwise()
+                } label: {
+                    Image(systemName: "gobackward")
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    rotateClockwise()
+                } label: {
+                    Image(systemName: "goforward")
+                }
+            }
         }
     }
 
@@ -36,6 +54,14 @@ struct FullImageView: View {
         }
             
         return uiImage ?? UIImage()
+    }
+    
+    private func rotateClockwise() {
+        rotation += 90.0
+    }
+    
+    private func rotateCounterClockwise() {
+        rotation -= 90.0
     }
 }
 
