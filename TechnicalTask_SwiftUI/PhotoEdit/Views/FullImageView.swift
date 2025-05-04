@@ -11,20 +11,23 @@ import Photos
 import SwiftUI
 
 struct FullImageView: View {
-    @State private var rotation: Double = 0.0
+    @StateObject private var viewModel: FullImageViewViewModel
+    
     @State private var scale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
 //    @State private var canvasView = PKCanvasView()
 //    @State private var toolPicker = PKToolPicker()
     
-    let asset: PHAsset
-
+    init(asset: PHAsset) {
+        _viewModel = StateObject(wrappedValue: FullImageViewViewModel(asset: asset))
+    }
+    
     var body: some View {
         VStack {
-            Image(uiImage: loadImage())
+            Image(uiImage: viewModel.loadImage())
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .rotationEffect(.degrees(rotation))
+                .rotationEffect(.degrees(viewModel.rotation))
                 .scaleEffect(scale)
                 .padding()
                 .gesture(
@@ -40,40 +43,19 @@ struct FullImageView: View {
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 Button {
-                    rotateCounterClockwise()
+                    viewModel.rotateCounterClockwise()
                 } label: {
                     Image(systemName: "gobackward")
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    rotateClockwise()
+                    viewModel.rotateClockwise()
                 } label: {
                     Image(systemName: "goforward")
                 }
             }
         }
-    }
-
-    private func loadImage() -> UIImage {
-        let manager = PHImageManager.default()
-        let options = PHImageRequestOptions()
-        options.isSynchronous = true
-            
-        var uiImage: UIImage?
-        manager.requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFit, options: options) { image, _ in
-            uiImage = image
-        }
-            
-        return uiImage ?? UIImage()
-    }
-    
-    private func rotateClockwise() {
-        rotation += 90.0
-    }
-    
-    private func rotateCounterClockwise() {
-        rotation -= 90.0
     }
 }
 
