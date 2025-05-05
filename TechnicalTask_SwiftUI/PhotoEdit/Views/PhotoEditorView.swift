@@ -6,30 +6,22 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct PhotoEditorView: View {
+    @State private var scale: CGFloat = 1.0
+    @State private var lastScale: CGFloat = 1.0
+    
     @StateObject private var viewModel = PhotoEditorViewViewModel()
     
     var body: some View {
         NavigationView {
-            ScrollView {
-//                Image(systemName: "photo")
-//                    .resizable()
-//                    .frame(width: 80, height: 80)
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3)) {
-                    ForEach(viewModel.photos, id: \.self) { asset in
-                        NavigationLink(destination: FullImageView(asset: asset)) {
-                            ImageView(asset: asset)
-                                .frame(width: 100, height: 100)
-                                .clipped()
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                    }
-                }
-                
-                if viewModel.isLoading {
-                    ProgressView("Loading...")
-                        .padding()
+            VStack {
+                if let image = viewModel.selectedImage {
+                    FullImageView(image: image, viewModel: viewModel)
+                        .rotationEffect(.degrees(viewModel.rotation))
+                        .scaleEffect(scale)
+                        .gesture(magnificationGesture)
                 }
             }
             .padding()
@@ -46,16 +38,59 @@ struct PhotoEditorView: View {
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        viewModel.loadPhotos()
+                    PhotosPicker("+", selection: $viewModel.imageSelection, matching: .images)
+                        .font(.title2)
+                        .bold()
+                        .padding(10)
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        Button {
+                            viewModel.rotateCounterClockwise()
+                        } label: {
+                            HStack {
+                                Text("Rotate counterclockwise")
+                                Image(systemName: "gobackward")
+                            }
+                        }
+                        
+                        Button {
+                            viewModel.rotateClockwise()
+                        } label: {
+                            HStack {
+                                Text("Rotate clockwise")
+                                Image(systemName: "goforward")
+                            }
+                        }
+                        
+                        Button {
+                            viewModel.saveDrawing()
+                        } label: {
+                            HStack {
+                                Text("Save photo")
+                                Image(systemName: "square.and.arrow.down")
+                            }
+                        }
                     } label: {
-                        Text("Add photo")
-                            .bold()
-                            .padding(10)
+                        Image(systemName: "ellipsis.circle")
+                            .imageScale(.large)
                     }
                 }
             }
+            .alert(isPresented: $viewModel.showAlert) {
+                Alert(title: Text("Saved to Photos"), dismissButton: .default(Text("OK")))
+            }
         }
+    }
+    
+    private var magnificationGesture: some Gesture {
+        MagnificationGesture()
+            .onChanged { value in
+                scale = lastScale * value
+            }
+            .onEnded { value in
+                lastScale = scale
+            }
     }
 }
 
