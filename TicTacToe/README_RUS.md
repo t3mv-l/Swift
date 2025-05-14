@@ -14,3 +14,5 @@
 ![](screenshots/project_structure.png)
 
 - За идею для проекта благодарю создателей [курса на Stepik](https://stepik.org/course/195212/).
+
+- P.S.: Спустя время я сделал этот проект [на **SwiftUI**](https://github.com/t3mv-l/Swift/tree/main/SwiftUI_Detailed), добавив нового функционала и анимаций.
