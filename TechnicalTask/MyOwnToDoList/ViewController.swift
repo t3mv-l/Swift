@@ -47,7 +47,12 @@ class ViewController: UIViewController {
         searchBar.delegate = self
         searchBar.showsBookmarkButton = true
         searchBar.setImage(UIImage(systemName: "microphone.fill"), for: .bookmark, state: .normal)
-        fetchTodos()
+        
+        if !UserDefaults.standard.bool(forKey: "isDataImported") {
+            fetchTodosFromJSON()
+        } else {
+            fetchTodosFromCoreData()
+        }
 
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
         taskListTableView.addGestureRecognizer(longPressGesture)
@@ -73,34 +78,39 @@ class ViewController: UIViewController {
         bottomToolBar.setItems([flexibleSpaceLeft, labelItem, flexibleSpaceRight, createTaskButton], animated: false)
     }
     
-    func fetchTodos() {
+    // Удаляю старые fetchTodos и processTodos
+    // Новый метод: загрузка из JSON только при первом запуске
+    func fetchTodosFromJSON() {
         guard let url = URL(string: "https://dummyjson.com/todos") else { return }
-        
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print("Error fetching todos: \(error)")
-                return
-            }
-            
+            if let error = error { print("Error fetching todos: \(error)"); return }
             guard let data = data else { return }
-            
             do {
                 let decodedResponse = try JSONDecoder().decode(TodoResponse.self, from: data)
-                self.processTodos(decodedResponse.todos)
+                DispatchQueue.main.async {
+                    CoreDataManager.shared.deleteAllTasks()
+                    CoreDataManager.shared.saveTasks(from: decodedResponse.todos)
+                    UserDefaults.standard.set(true, forKey: "isDataImported")
+                    self.fetchTodosFromCoreData()
+                }
             } catch {
                 print("Error coding JSON: \(error)")
             }
         }
         task.resume()
     }
-    
-    func processTodos(_ todos: [Todo]) {
-        CoreDataManager.shared.saveTasks(from: todos)
+    // Новый метод: загрузка из Core Data
+    func fetchTodosFromCoreData() {
         DispatchQueue.main.async {
-            self.todos = todos
+            let coreDataTodos = CoreDataManager.shared.fetchTasks()
+            self.todos = coreDataTodos
             self.taskListTableView.reloadData()
             self.countLabel.text = String(format: self.countLabelFormat, self.todos.count)
             self.countLabel.sizeToFit()
+            
+            if self.todos.isEmpty && !UserDefaults.standard.bool(forKey: "isDataImported") {
+                self.fetchTodosFromJSON()
+            }
         }
     }
     
@@ -324,11 +334,9 @@ class ViewController: UIViewController {
     }
     
     func deleteTask(at indexPath: IndexPath) {
-        todos.remove(at: indexPath.row)
-        CoreDataManager.shared.deleteTask(with: Int32(indexPath.row + 1))
-        //todos = CoreDataManager.shared.fetchTasks()
-        taskListTableView.reloadData()
-        countLabel.text = String(format: countLabelFormat, todos.count)
+        let todoToDelete = todos[indexPath.row]
+        CoreDataManager.shared.deleteTask(with: todoToDelete.id)
+        fetchTodosFromCoreData()
     }
     
     private func toggleTodoCompletion(at index: Int) {
@@ -390,18 +398,12 @@ extension ViewController: UIScrollViewDelegate {
 
 extension ViewController: CreateTaskViewControllerDelegate {
     func addNewTask(todo: Todo, description: String?, date: String) {
-        let newTodo = Todo(id: todo.id, todo: todo.todo, description: description, date: getCurrentDateString(), completed: todo.completed)
-        todos.append(newTodo)
-        let newId = Int32(todos.count)
-        CoreDataManager.shared.createTask(newId, newTodo.todo, newTodo.description, newTodo.completed)
-        //todos = CoreDataManager.shared.fetchTasks()
-        taskListTableView.reloadData()
-        countLabel.text = String(format: countLabelFormat, todos.count)
+        CoreDataManager.shared.createTask(todo.id, todo.todo, todo.description, todo.completed)
+        fetchTodosFromCoreData()
     }
     
     func updateTask(at index: Int, todo: Todo, description: String?, date: String) {
-        todos[index] = todo
-        //todos = CoreDataManager.shared.fetchTasks()
-        taskListTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        CoreDataManager.shared.updateTask(with: todo.id, newHeader: todo.todo, newDesc: description, newIsCompleted: todo.completed)
+        fetchTodosFromCoreData()
     }
 }

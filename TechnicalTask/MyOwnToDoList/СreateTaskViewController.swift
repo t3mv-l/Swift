@@ -72,7 +72,9 @@ class CreateTaskViewController: UIViewController {
             let updatedTodo = Todo(id: existingTodos[editingIndex].id, todo: title, description: description, date: getCurrentDateString(), completed: completedStatus)
             delegate?.updateTask(at: editingIndex, todo: updatedTodo, description: description, date: getCurrentDateString())
         } else {
-            let newID = (existingTodos.last?.id ?? 0) + 1
+            // Получаем максимальный id из существующих задач, чтобы не было конфликтов
+            let maxId = CoreDataManager.shared.fetchTasks().map { $0.id }.max() ?? 0//existingTodos.map { $0.id }.max() ?? 0
+            let newID = maxId + 1
             let newTodo = Todo(id: newID, todo: title, description: description, date: getCurrentDateString(), completed: false)
             delegate?.addNewTask(todo: newTodo, description: description, date: getCurrentDateString())
         }
