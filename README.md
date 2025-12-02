@@ -1,6 +1,6 @@
 # Here you can see my Swift language projects. 
 
-- There is either a console project, where I practiced the basic syntax constructs of the language, or GUI projects, where I learn how to work with the UIKit and SWiftUI frameworks.
+- There is either a console project, where I practiced the basic syntax constructs of the language, or GUI projects, where I learn how to work with the UIKit and SwiftUI frameworks.
 
 ---
 
